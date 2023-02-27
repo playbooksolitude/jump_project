@@ -34,31 +34,40 @@ netflix |> filter(show_title == "Stranger Things") |>
   summarise(M_hours = sum(weekly_hours_viewed)/1000000) |> 
   arrange(desc(M_hours))
 
-
+netflix |> filter(show_title == "The Queen's Gambit")
+netflix
 
 
 netflix |> dim();netflix |> slice(1,3440)
 
-netflix |> group_by(show_title) |> 
+#season_title
+(netflix |> filter(season_title != "N/A") |> 
+  group_by(season_title) |> 
   summarise(M_hours = sum(weekly_hours_viewed)/1000000,
-         n = n()) |> 
-  arrange(desc(M_hours)) |> 
-  mutate(rank = min_rank(desc(M_hours))) |> 
-  filter(rank %in% c(1:5)) -> netflix_4_total
+         n = n()) |> arrange(desc(M_hours)) |> 
+    mutate(rank = min_rank(desc(M_hours))) |> 
+  filter(rank %in% c(1:5)) -> netflix_4_season)
+  
+
+(netflix |> 
+    group_by(show_title) |> 
+    summarise(M_hours = sum(weekly_hours_viewed)/1000000,
+              n = n()) |> arrange(desc(M_hours)) |> 
+    mutate(rank = min_rank(desc(M_hours))) |> 
+    filter(rank %in% c(1:5)) -> netflix_4_total)
 
 ggplot(data = netflix_4_total, 
        aes(x = show_title |> fct_reorder(M_hours), y = M_hours)) + 
   geom_bar(stat = "identity") +
   bbc_style() +
   geom_label(aes(label = round(M_hours,0)), size = 10) +
-  labs(title = "Netflix global top viewd (million hours)",
-       subtitle = "2021-07-04 ~ 2023-02-19")
+  labs(title = "NETFLIX global top viewd (million hours)",
+       subtitle = "2021-07-04 ~ 2023-02-19") 
 
 #2021 #2022 #2023 top10
 
 (netflix |> 
   separate(week, into = c("year", "month", "day"), sep = "-") -> netflix_2_year)
-
 
 
   #2021 -----------------
@@ -75,7 +84,7 @@ ggplot(data = netflix_4_2021,
   geom_bar(stat = "identity") +
   bbc_style() +
   geom_label(aes(label = round(M_hours,0)), size = 10) +
-  labs(title = "Netflix global top viewed (million hours)",
+  labs(title = "NETFLIX global top viewed (million hours)",
        subtitle = "2021-07 ~ 2021-12")
 
   #2022 -----------------
@@ -92,7 +101,7 @@ ggplot(data = netflix_4_2022,
   geom_bar(stat = "identity") +
   bbc_style() +
   geom_label(aes(label = round(M_hours,0)), size = 10) +
-  labs(title = "Netflix global top viewed (million hours)",
+  labs(title = "NETFLIX global top viewed (million hours)",
        subtitle = "2021-01 ~ 2022-12")
 
 
