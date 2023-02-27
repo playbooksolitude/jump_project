@@ -182,4 +182,5 @@ netflix_3_2022 |> group_by(year, month) |>
   bbc_style()
 
 mpg
+diamonds
 
