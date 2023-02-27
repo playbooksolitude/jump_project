@@ -62,7 +62,7 @@ ggsave("인천공항도착_22년12월top5.png")
 
 
 
-# ------------------------------------------------ top 15
+# ------------------------------------------------ top 5
 icn_arr |> group_by(출발공항명) |> 
   summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
   filter(rank %in% c(1:5)) |> arrange(rank) -> icn_arr_2_top5
@@ -103,30 +103,74 @@ ggplot(data = icn_dep_2_asiantop5,
 icn_dep |> filter(항공사 == "대한항공") |> 
   group_by(도착공항명) |> 
   summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
-  filter(rank %in% c(1:10)) |> arrange(rank) -> icn_dep_2_kortop10
+  filter(rank %in% c(1:20)) |> arrange(rank) -> icn_dep_2_kortop20
 
-(ggplot(data = icn_dep_2_kortop10, 
+ggplot(data = icn_dep_2_kortop20, 
        aes(x = 도착공항명 |> fct_reorder(n), y = n)) + 
   geom_bar(stat = "identity") +
   bbc_style() + coord_flip() +
   geom_label(aes(label = n)) +
-  labs(title = "2022년 12월 최다 노선 top 10",
-       subtitle = "대한항공 인천출발") -> kor_top10)
-
+    labs(title = "대한항공 최다 노선 top 20",
+         subtitle = "2022년 12월 인천출발")
 
 #아시아나
 icn_dep |> filter(항공사 == "아시아나항공")
 (icn_dep |> filter(항공사 == "아시아나항공") |> 
     group_by(도착공항명) |> 
     summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
-    filter(rank %in% c(1:10)) |> arrange(rank) -> icn_dep_2_asiantop10)
+    filter(rank %in% c(1:20)) |> arrange(rank) -> icn_dep_2_asiantop20)
 
-(ggplot(data = icn_dep_2_asiantop10, 
+ggplot(data = icn_dep_2_asiantop20, 
        aes(x = 도착공항명 |> fct_reorder(n), y = n)) + 
   geom_bar(stat = "identity") +
   bbc_style() + coord_flip() +
   geom_label(aes(label = n)) +
-  labs(title = "2022년 12월 최다 노선 top 10",
-       subtitle = "아시아나항공 인천출발") -> asiana_top10)
+    labs(title = "아시아나항공 최다 노선 top 20",
+         subtitle = "2022년 12월 인천출발")
 
 kor_top10 / asiana_top10
+
+
+# ------------------------------------------------- top 20 #color 
+#대한항공
+icn_dep |> filter(항공사 == "대한항공") |> 
+  group_by(도착공항명) |> 
+  summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
+  filter(rank %in% c(1:20)) |> arrange(rank) -> icn_dep_2_kortop20
+
+#변수 설정
+icn_dep_2_kortop20$도착공항명 %in% c("로스앤젤레스", 
+        "뉴욕", "프랑크푸르트", "시카고","런던히드로", "시애틀") -> kor_usa
+
+ggplot(data = icn_dep_2_kortop20, 
+       aes(x = 도착공항명 |> fct_reorder(n), y = n)) + 
+  geom_bar(stat = "identity",
+           fill = ifelse(kor_usa == TRUE, "red", "#dddddd")) +
+  bbc_style() + coord_flip() +
+  geom_label(aes(label = n)) +
+  labs(title = "대한항공 최다 노선 top 20",
+       subtitle = "2022년 12월 인천출발")
+
+#아시아나
+icn_dep |> filter(항공사 == "아시아나항공")
+(icn_dep |> filter(항공사 == "아시아나항공") |> 
+    group_by(도착공항명) |> 
+    summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
+    filter(rank %in% c(1:20)) |> arrange(rank) -> icn_dep_2_asiantop20)
+
+ggplot(data = icn_dep_2_asiantop20, 
+       aes(x = 도착공항명 |> fct_reorder(n), y = n)) + 
+  geom_bar(stat = "identity",
+           fill = ifelse(icn_dep_2_asiantop20$도착공항명 %in% c("로스앤젤레스", 
+            "푸랑크푸르트", "샌프란시스코", "시애틀"),
+           "red", "#dddddd")) +
+  bbc_style() + coord_flip() +
+  geom_label(aes(label = n)) +
+  labs(title = "아시아나항공 최다 노선 top 20",
+       subtitle = "2022년 12월 인천출발")
+
+# ifelse(icn_dep_2_kortop20$도착공항명 %in% c("로스앤젤레스", 
+#   "뉴욕", "프랑크푸르트", "시카고", "런던히드로", "시애틀")
+       
+
+
