@@ -16,11 +16,6 @@ netflix
 #separate
 
 #top 10
-colnames(netflix)
-
-netflix |> view()
-netflix |> head()
-
 netflix
 netflix |> 
   group_by(show_title, season_title) |> 
@@ -166,24 +161,24 @@ netflix_3_2022 |> group_by(year, month) |>
   summarise(M_hours = sum(weekly_hours_viewed)/1000000) |> 
   ggplot(aes(x = month, y = M_hours)) + 
   geom_bar(stat = "identity") +
-  geom_line(group = 1, color = "#1380A1") +
-  geom_label(aes(label = round(M_hours,0))) +
+  geom_line(group = 1, color = "#333333") +
+  geom_label(aes(label = round(M_hours,0)), size = 5) +
   geom_hline(yintercept = 0, size = 1, color = "#333333")+
   theme(
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank()) + bbc_style() +
-  labs(title = "Netflix time spent", 
-       subtitle = "2022 by month")
+  labs(title = "NETFLIX 2022 time spent", 
+       subtitle = "Million hours, by monthly")
 
 netflix_3_2022 |> group_by(year, month) |> 
   summarise(M_hours = sum(weekly_hours_viewed)/1000000) |> 
   ggplot(aes(x = month, y = M_hours)) +
   geom_bar(stat = "identity") + 
   geom_line(group = 1, color = "#1380A1") +
-  geom_label(aes(label = round(M_hours,0))) +
-  geom_hline(yintercept = 0, size = 3, color = "#333333") +
-  labs(title = "Netflix time spent", 
-       subtitle = "2022 by monthly") +
+  geom_label(aes(label = round(M_hours,0)), size = 5) +
+  geom_hline(yintercept = 0, size = 1, color = "#333333") +
+  labs(title = "NETFLIX 2022 time spent", 
+       subtitle = "Million hours, by monthly") +
   bbc_style()
 
 
