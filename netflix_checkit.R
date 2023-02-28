@@ -181,4 +181,4 @@ netflix_3_2022 |> group_by(year, month) |>
        subtitle = "Million hours") +
   bbc_style()
 
-bbc_style
+
