@@ -178,10 +178,7 @@ netflix_3_2022 |> group_by(year, month) |>
   geom_label(aes(label = round(M_hours,0)), size = 5) +
   geom_hline(yintercept = 0, size = 1, color = "#333333") +
   labs(title = "NETFLIX 2022 time spent", 
-       subtitle = "Million hours, by monthly") +
+       subtitle = "Million hours") +
   bbc_style()
 
-mpg
-diamonds
-mtcars
-
+bbc_style
