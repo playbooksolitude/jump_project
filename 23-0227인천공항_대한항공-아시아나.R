@@ -21,9 +21,11 @@ getwd()
 read_excel("/Users/yohanchoi/Documents/jump/jump_project/files/dep_22_12.xlsx") -> icn_dep
 read_excel("/Users/yohanchoi/Documents/jump/jump_project/files/arr_22_12.xlsx") -> icn_arr
 
+icn_dep |> dim() #출발                  #11435 * 13
+icn_arr |> dim() #도착                  #11447 * 13
 
-icn_dep |> dim()                         #11435 * 13
-icn_arr |> dim()                         #11447 * 13
+icn_dep |> view()
+icn_arr
 
 icn_dep |> print(width = Inf)
 icn_arr |> print(width = Inf)
@@ -31,10 +33,33 @@ icn_arr |> print(width = Inf)
 full_join(icn_dep, icn_arr) |> dim()     #22882 * 14
 11435+11447
 
-full_join(icn_dep, icn_arr) |> view()
-full_join(icn_dep, icn_arr) |> tail() |> view()
+#
+icn_dep
+icn_arr
 
+colnames(icn_dep)
+colnames(icn_arr)
+setdiff(colnames(icn_dep), colnames(icn_arr))
+setdiff(colnames(icn_dep), colnames(icn_arr))
 
+intersect() #같은 것만 출력
+setdiff()   #다른 것만 출력
+
+intersect(colnames(icn_dep), colnames(icn_arr))
+inner_join(icn_dep, icn_arr)
+full_join(icn_dep, icn_arr)
+full_join(icn_arr, icn_dep) -> icn_full
+
+icn_arr |> 
+  group_by(출발공항명) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+icn_dep |> group_by(출/도착구분) |> 
+  summarise(n = n()) |> 
+  arrange(desc(n))
+
+icn_dep
 
 icn_full |> print(width = Inf)
 icn_full |> tail() |> print(width = Inf)
@@ -66,7 +91,6 @@ icn_arr |> select(-10) |>
 icn_arr |> group_by(출발공항명) |> 
   summarise(n = n()) |> arrange(desc(n))
 
-
 icn_dep |> 
   group_by(도착공항명) |> 
   summarise(n = n()) |> 
@@ -80,10 +104,6 @@ icn_dep |>
 icn_dep |> filter(항공사 == "제주항공")
 icn_dep |> filter(날짜 == "20221224",
                   항공사 == "제주항공")
-
-
-
-
 
 icn_arr |> group_by(출발공항명) |> 
   summarise(n = n()) |> arrange(desc(n))
@@ -107,8 +127,6 @@ ggplot(data = icn_arr_2_top5,
 (icn_arr |> group_by(출발공항명) |> 
   summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
   filter(rank %in% c(1:5)) |> arrange(rank) -> icn_arr_2_top5)
-
-colnames(icn_dep)
 
   #대한항공
 icn_dep |> 
@@ -209,7 +227,6 @@ ggplot(data = icn_dep_2_asiantop20,
 
 # ifelse(icn_dep_2_kortop20$도착공항명 %in% c("로스앤젤레스", 
 #   "뉴욕", "프랑크푸르트", "시카고", "런던히드로", "시애틀")
-       
 
 #join
 icn_arr
@@ -221,8 +238,6 @@ colnames(icn_dep)
 intersect(colnames(icn_arr),colnames(icn_dep))
 setdiff(colnames(icn_arr),colnames(icn_dep))
 setdiff(colnames(icn_dep),colnames(icn_arr))
-#
-
 
 #join
 홈런 <- tibble(연도=c(2003, 1999, 2015, 2003, 2014, 2015, 2002, 2015, 2002, 2017),

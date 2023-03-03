@@ -16,9 +16,37 @@ netflix
 #separate
 
 #top 10
-netflix
+netflix |> view()
+#제목     show_title
+#시즌     season_title
+#시청시간 weekly_hours_viewed
+netflix |> view()
+
+##
 netflix |> 
+  group_by(show_title) |> 
+  summarise(hours = sum(weekly_hours_viewed)) |> 
+  arrange(desc(hours))
+
+netflix |> 
+  filter(show_title == "Stranger Things")
+
+
+all_weeks_global -> netflix
+
+netflix |> filter(show_title == "Stranger Things") |> 
   group_by(show_title, season_title) |> 
+  summarise(M_hours = sum(weekly_hours_viewed)/1000000) |> 
+  arrange(desc(M_hours))
+
+
+
+
+
+
+
+netflix |> 
+  group_by(show_title) |> 
   summarise(M_hours = sum(weekly_hours_viewed)/1000000) |> 
   arrange(desc(M_hours))
 
@@ -180,5 +208,28 @@ netflix_3_2022 |> group_by(year, month) |>
   labs(title = "NETFLIX 2022 time spent", 
        subtitle = "Million hours") +
   bbc_style()
+library(bbplot)
 
+#2021, 2022, 2023
+netflix |> 
+  separate(week, into = c("year","month", "day")
+           ,sep = "-")
 
+netflix |> 
+  separate(week, into = c("year", "month", "day"),
+           sep = "-", convert = T) |> 
+  filter(year == 2022) -> netflix_2022
+
+netflix_2022
+
+netflix_2022 |> 
+  group_by(month) |> 
+  summarise(M_hours = sum(weekly_hours_viewed)/1000000) |> 
+  ggplot(aes(x = month |> as.factor(), 
+             y = M_hours)) + 
+  geom_bar(stat = "identity") +
+  geom_line(group = 1) +
+  geom_label(aes(label = round(M_hours,0)))+
+  labs(title = "NETFLIX",
+       subtitle = "2022.01~2022.12")
+  
