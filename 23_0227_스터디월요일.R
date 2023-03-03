@@ -2,3 +2,7 @@
 
 #
 library(tidyverse)
+sample(1:6, 6) |> sd()
+sample(1:6, 6) |> mean()
+
+mpg
