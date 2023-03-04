@@ -5,6 +5,7 @@ library(tidyverse)
 library(showtext)
 showtext.auto()
 library(bbplot)
+library(patchwork)
 
 #
 icn_arr
@@ -115,15 +116,23 @@ icn_full7 |> filter(status == "지연") |>
   mutate(rank = row_number(desc(n))) |> 
   filter(rank %in% c(1:10)) -> icn_8_4late
 
-icn_8_4late |> filter(구분 == "출발") |> 
+  #지연 출발
+(icn_8_4late |> filter(구분 == "출발") |> 
   ggplot(aes(x = 항공사 |> fct_reorder(n), y = n)) + geom_bar(stat = "identity") +
   facet_wrap(.~구분, nrow = 2) + bbc_style() +
-  geom_label(aes(label = n)) + coord_flip()
+  geom_label(aes(label = n)) + coord_cartesian(ylim = c(0,700)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = .9)) -> a1)
 
-icn_8_4late |> filter(구분 == "도착") |> 
+  #지연 도착
+(icn_8_4late |> filter(구분 == "도착") |> 
   ggplot(aes(x = 항공사 |> fct_reorder(n), y = n)) + geom_bar(stat = "identity") +
   facet_wrap(.~구분, nrow = 2) + bbc_style() +
-  geom_label(aes(label = n)) + coord_flip()
+  geom_label(aes(label = n), size = 7) + coord_cartesian(ylim = c(0,700)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = .9)) -> a2)
+
+icn_full7
+
+a1 / a2
 
 #인천공항 자주 이용하는 항공사
 icn_full7 |> 
@@ -133,7 +142,7 @@ icn_full7 |>
   filter(rank %in% c(1:10)) |> 
   ggplot(aes(x = 항공사 |> fct_reorder(desc(n)), y = n)) + geom_bar(stat = "identity") +
   facet_wrap(.~구분, nrow = 2) + bbc_style() +
-  geom_label(aes(label = n))
+  geom_label(aes(label = n), size = 7)
 
 
 
