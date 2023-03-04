@@ -4,6 +4,7 @@
 #
 library(tidyverse)
 library(readxl)
+library(lubridate)
 
 #install.packages('devtools')
 #devtools::install_github('bbc/bbplot')
@@ -13,29 +14,11 @@ library(bbplot)
 library(showtext)
 showtext_auto()
 
-
-getwd()
-# read_excel("/Users/yohan_15/Documents/jump/jump_project/files/arr_22_12.xlsx") -> icn_arr
-# read_excel("/Users/yohan_15/Documents/jump/jump_project/files/dep_22_12.xlsx") -> icn_dep
-
 read_excel("/Users/yohanchoi/Documents/jump/jump_project/files/dep_22_12.xlsx") -> icn_dep
 read_excel("/Users/yohanchoi/Documents/jump/jump_project/files/arr_22_12.xlsx") -> icn_arr
 
 icn_dep |> dim() #출발                  #11435 * 13
 icn_arr |> dim() #도착                  #11447 * 13
-
-icn_dep |> view()
-icn_arr
-
-icn_dep |> print(width = Inf)
-icn_arr |> print(width = Inf)
-
-full_join(icn_dep, icn_arr) |> dim()     #22882 * 14
-11435+11447
-
-#
-icn_dep
-icn_arr
 
 colnames(icn_dep)
 colnames(icn_arr)
@@ -59,7 +42,6 @@ icn_dep |> group_by(출/도착구분) |>
   summarise(n = n()) |> 
   arrange(desc(n))
 
-icn_dep
 
 icn_full |> print(width = Inf)
 icn_full |> tail() |> print(width = Inf)
@@ -239,40 +221,24 @@ intersect(colnames(icn_arr),colnames(icn_dep))
 setdiff(colnames(icn_arr),colnames(icn_dep))
 setdiff(colnames(icn_dep),colnames(icn_arr))
 
-#join
-홈런 <- tibble(연도=c(2003, 1999, 2015, 2003, 2014, 2015, 2002, 2015, 2002, 2017),
-             선수=c('이승엽', '이승엽', '박병호', '심정수', '박병호', 
-                  '나바로', '이승엽', '테임즈', '심정수', '최정'),
-             홈런=c(56, 54, 53, 53, 52, 48, 47, 47, 46, 46),
-             팀=c('삼성', '삼성', '넥센', '현대', '넥센', '삼성', '삼성', 
-                 'NC', '현대', 'SK'))
+#
+icn_dep
+icn_arr
+icn_dep |> rename("실제시간" = 출발시간) |> 
+  rename(구분 = `출/도착구분`,
+         종류 = 구분) -> icn_dep
 
-팀 <- tibble(팀=c('KIA', 'KT', 'LG', 'NC', 'SK', '넥센', '두산', '롯데', 
-                '삼성', '한화'),
-            애칭=c('타이거즈', '위즈', '트윈스', '다이노스', '와이번스', 
-                 '히어로즈', '베어스', '자이언츠', '라이온즈', '이글스'))
+icn_arr |> rename("실제시간" = 도착시간) |> 
+  rename(구분 = `출/도착구분`,
+         종류 = 구분) -> icn_arr
+icn_dep
+icn_arr
+full_join(icn_dep, icn_arr) -> icn_full
+icn_full -> icn_full2
+ymd(icn_full$날짜) -> icn_full2$날짜
 
-#vlookup
-inner_join(홈런,팀)        #
-left_join(홈런,팀)         #
-right_join(홈런,팀)        #
-full_join(홈런,팀)
-
-anti_join(홈런,팀)
-semi_join(홈런,팀)
-
-
-?setdiff
-
-
-
-
-
-
-
-
-
-
+icn_full2 |> select(-9) -> icn_full3
+icn_full2 |> head() |> view()
 
 
 
