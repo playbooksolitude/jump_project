@@ -25,3 +25,9 @@ table(diamonds$cut) |> barplot()
 flights
 table(flights$dest) |> barplot()
 table(flights$origin) |> barplot()
+
+table(flights$dest) |> qplot()
+table(flights$origin) |> qplot()
+
+table(flights$tailnum) |> qplot()
+table(flights$tailnum) |> length()
