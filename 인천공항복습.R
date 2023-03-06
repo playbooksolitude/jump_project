@@ -143,7 +143,28 @@ icn_full7 |>
   geom_label(aes(label = n), size = 7)
 
 
-#가장 지연이 길었던 경우
+#가장 지연이 길었던 경우 #출발
+(icn_full7 |> mutate(
+  delay = con_hour - plan_hour, .before = 1) |> 
+  filter(type == "여객", delay >= 2, 구분 == "출발") |> 
+  arrange(desc(delay)) -> delay_dep)
+
+ggplot(delay_dep, aes(x = day |> as.factor(), y = delay)) + 
+  geom_jitter(stat = "identity") + bbc_style()# +
+  geom_label(data = filter(delay_dep, delay > 9), aes(label = 도착공항명))
+  
+#가장 지연이 길었던 경우 #도착
+icn_full7 |> mutate(
+  delay = con_hour - plan_hour, .before = 1) |> 
+  filter(type == "여객", delay >= 1, 구분 == "도착") |> 
+  arrange(desc(delay)) -> delay_arr
+
+ggplot(delay_arr, aes(x = day |> as.factor(), y = delay)) + 
+  geom_jitter(stat = "identity") + bbc_style()# +
+geom_label(data = filter(delay_dep, delay > 9), aes(label = 출발공항명))
+
+
+#
 icn_full7 |> mutate(
   delay = con_hour - plan_hour, .before = 1) |> filter(type == "여객", delay > 3) |> 
   arrange(desc(delay)) |> group_by(항공사) |> summarise(n = n()) |> 
