@@ -95,7 +95,7 @@ ggplot(rfm_cus2022, aes(x = month |> as.factor(),
 
 #면분할
 rfm_cus2022 |> ggplot(aes(x = revenue, y = number_of_orders)) + 
-  geom_point(stat = "identity", ) + 
+  geom_point(stat = "identity", alpha = .3) + 
   facet_wrap(.~month)
 
 ?rfm_heatmap
@@ -110,7 +110,6 @@ rfm_order <- rfm_table_order(rfm_data_orders, customer_id, order_date,
 
 # heat map
 rfm_heatmap(rfm_order)
-rfm_heatmap(rfm_order) 
 
 
 
