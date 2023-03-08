@@ -176,15 +176,9 @@ ggplot(data = icn_dep_2_asiantop20,
   summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
   filter(rank %in% c(1:20)) |> arrange(rank) -> icn_dep_2_kortop20)
 
-<<<<<<< HEAD
-#color table
-icn_dep_2_kortop20$도착공항명 %in% c("로스앤젤레스", 
-        "뉴욕", "프랑크푸르트", "시카고","런던히드로", "시애틀") -> kor_usa
-=======
 #변수 설정
 (icn_dep_2_kortop20$도착공항명 %in% c("로스앤젤레스", 
         "뉴욕", "프랑크푸르트", "시카고","런던히드로", "시애틀") -> kor_usa)
->>>>>>> 278d978e4f6ed51900e57eee1af62f02a9a472a2
 
 ggplot(data = icn_dep_2_kortop20, 
        aes(x = 도착공항명 |> fct_reorder(n), y = n)) + 
@@ -202,20 +196,12 @@ ggplot(data = icn_dep_2_kortop20,
     summarise(n = n()) |> mutate(rank = min_rank(desc(n))) |> 
     filter(rank %in% c(1:20)) |> arrange(rank) -> icn_dep_2_asiantop20)
 
-#color table
-icn_dep_2_asiantop20$도착공항명 %in% c("로스앤젤레스", 
-                "프랑크푸르트", "샌프란시스코", "시애틀", "뉴욕") -> asiana_usa
-
 ggplot(data = icn_dep_2_asiantop20, 
        aes(x = 도착공항명 |> fct_reorder(n), y = n)) + 
   geom_bar(stat = "identity",
-<<<<<<< HEAD
-           fill = ifelse(asiana_usa == T,"red", "#dddddd")) +
-=======
            fill = ifelse(icn_dep_2_asiantop20$도착공항명 %in% c("로스앤젤레스", 
             "프랑크푸르트", "샌프란시스코", "시애틀","뉴욕"),
            "#1380A1", "#dddddd")) +
->>>>>>> 278d978e4f6ed51900e57eee1af62f02a9a472a2
   bbc_style() + coord_flip() +
   geom_label(aes(label = n)) +
   labs(title = "아시아나항공 최다 노선 top 20",
