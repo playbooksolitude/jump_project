@@ -47,12 +47,12 @@ billboard_2_pivot |> group_by(artist) |> summarise(n = n()) -> billboard_3
 #wordcloud
 wordcloud(words = billboard_3$artist,
           freq = billboard_3$n,
-          min.freq = 10,
-          max.words = 300,
-          random.order = F,
-          rot.per = .1,
-          scale = c(4,0.3),
-          use.r.layout = T,
+          min.freq = 10,               #10보다 낮은 숫자는 제외, 10은 포함
+          max.words = 300,             #300 초과 제외, 300은 포함
+          random.order = F,            #1등을 가운데에 노출
+          rot.per = .1,                #세로로 보여주는 비중 10%
+          scale = c(5,.2),             #적절한 크라우드 크기 #본인이 변경
+          use.r.layout = F,            #
           colors = color)
 
 color <- brewer.pal(8,"Dark2")
@@ -64,7 +64,7 @@ brewer.pal.info
 
 wordcloud(words = billboard_3_no1$artist,
           freq = billboard_3_no1$n,
-          min.freq = 1,
+          min.freq = 6,
           max.words = 100,
           random.order = F,
           rot.per = .0,
