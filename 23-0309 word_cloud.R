@@ -56,5 +56,5 @@ wordcloud(words = word_cloud2$dest,
           random.order = F,
           rot.per = .1,
           scale = c(4,0.3),
-          colors = color,
+          #colors = color,
           use.r.layout = T)
