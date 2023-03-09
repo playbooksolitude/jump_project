@@ -25,9 +25,18 @@ table(diamonds$cut) |> barplot()
 flights
 table(flights$dest) |> barplot()
 table(flights$origin) |> barplot()
+table(flights$tailnum) |> barplot()
 
 table(flights$dest) |> qplot()
 table(flights$origin) |> qplot()
 
 table(flights$tailnum) |> qplot()
 table(flights$tailnum) |> length()
+
+#
+icn_full
+colnames(icn_arr)
+colnames(icn_dep)
+icn_arr |> rename(type = "출/도착구분",
+                  출발_도착_시간 = 도착시간) -> icn_arr_2_sep
+icn_arr_2_sep

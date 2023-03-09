@@ -30,7 +30,6 @@ icn_full2 |>
          contains("공항"), everything()) |> 
   select(-예상시간) -> icn_full3 # ----예상시간 제외
 
-
 #시간 변경
 (icn_full3 |> separate(계획시간, into = c("plan_hour", "plan_min"), sep = ":", convert = T) |> 
   separate(실제시간, into = c("con_hour", "con_min"), sep = ":", convert = T) -> icn_full4)
@@ -184,9 +183,6 @@ dice <- function() {
 
 dice()
 (1/6)*(1/5)*(1/4)*(1/3)*(1/2)*(1/1)
-
-
-
 anscombe
 
 tibble(
@@ -228,8 +224,6 @@ ggplot(df) +
   #geom_text(aes(x=12, y=7, label="대한항공 vs 아시아나항공"), size = 10) + 
   geom_label(aes(x=15, y=8, label="대한항공 vs 아시아나항공"), size = 10) + 
   ylim(3, 8)
-
-
 
 
 
