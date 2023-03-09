@@ -43,15 +43,18 @@ table(rfm_cus$year)
 rfm_data_customer |> 
   str_replace(most_recent_visit, "2006", "2022")
 
+#
 rfm_data_customer |> separate(most_recent_visit,
                               into = c("year", "month", "day"),
                               sep = "-", convert = T) -> rfm_cus
 
 year2 = as.integer(2022)
+#
 rfm_cus |> mutate(year2, .before = 3) |> select(-year) |> 
   rename(year = year2) -> rfm_cus2
 
 rfm_cus2 |> filter(year == 2022) |> ggplot(aes(x = month)) + geom_bar()
+#
 rfm_cus2 |> filter(year == 2022) -> rfm_cus2022
 colnames(rfm_cus2022)
   #revenue #recency_days #number_of_orders
