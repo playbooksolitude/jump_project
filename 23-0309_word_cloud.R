@@ -51,7 +51,7 @@ wordcloud(words = billboard_3$artist,
           max.words = 300,             #300 초과 제외, 300은 포함
           random.order = F,            #1등을 가운데에 노출
           rot.per = .1,                #세로로 보여주는 비중 10%
-          scale = c(5,.2),             #적절한 크라우드 크기 #본인이 변경
+          scale = c(4,.2),             #적절한 크라우드 크기 #본인이 변경
           use.r.layout = F,            #
           colors = color)
 
@@ -64,7 +64,7 @@ brewer.pal.info
 
 wordcloud(words = billboard_3_no1$artist,
           freq = billboard_3_no1$n,
-          min.freq = 6,
+          min.freq = 3,
           max.words = 100,
           random.order = F,
           rot.per = .0,
@@ -90,7 +90,18 @@ billboard
 (billboard_2_pivot |> filter(rank %in% c(1:10)) |> group_by(track) |> 
     summarise(n = n()) |> arrange(desc(n)) -> billboard_3_track)
 
+#
+getwd()
+library(readxl)
+#read_excel("./files/KOBIS_2022.xls")
+read_csv("./files/KOBIS_2022_edit.csv", skip = 4) -> kobis
+kobis
 
+
+library(gapminder)
+(gapminder |> slice(829:852) |> select(-continent) -> gapminder_NSKorea)
+
+library(bbplot)
 
 
 
