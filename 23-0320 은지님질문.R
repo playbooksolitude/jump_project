@@ -1,0 +1,74 @@
+#23-0320 mon 19:25
+
+#
+library(tidyverse)
+
+#student
+Student ID,Full Name,favourite.food,mealPlan,AGE
+1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+2,Barclay Lynn,French fries,Lunch only,5
+3,Jayendra Lyne,N/A,Breakfast and lunch,7
+4,Leon Rossini,Anchovies,Lunch only,
+5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+6,Güvenç Attila,Ice cream,Lunch only,6
+
+read.csv(file = "clipboard")
+read.table(file = "clipboard", sep = "\t")
+
+
+
+#
+read_csv("a,b,c
+         1,2,3
+         4,5,6")
+
+read_csv("a,b,c
+         1,2,3
+         4,5,6
+         7,8,9
+         10,11,12", skip = 2)
+
+
+read_csv("#a,b,c
+         1,2,3
+         #4,5,6
+         7,8,9
+         10,11,12", comment = '#')  # '#'붙은 곳은 출력 안 함,
+
+#
+read_csv("1,2,3\n4,5,6",col_names = FALSE)  #열 이름을 R에서 자동으로 할당
+read_csv("1,2,3\n4,5,6",col_names =c("갈","김","목"))  #열 이름을 사용자가 지정
+
+read_csv("x,y,z
+         2,5,.", na = '.')  #결측값을 명시적으로 표시
+
+read_csv("x,y,z
+         2,5,4
+         2,/,4", na = '/')  #문자는 상관없음
+
+#
+install.packages("janitor")   #clean_names() 함수 쓰기 위해 필요함
+library(janitor)              #clean_names() 함수 쓰기 위해 필요함
+
+student
+student |> is.na()
+student |> clean_names()  # 한 번에 모든 열의 이름 snakecase로 바꿈
+#snakecase: 열 이름의 첫 글자는 소문자로, 언더바로 연결
+
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
