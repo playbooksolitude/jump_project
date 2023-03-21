@@ -3,6 +3,9 @@
 
 #import
 library(tidyverse)
+library(bbplot)
+library(patchwork)
+
 read_csv("./files/KOBIS_2022_edit.csv", skip = 4) -> kobis
 colnames(kobis)
 kobis |> head()
@@ -85,15 +88,19 @@ ggplot(kobis7, aes(영화명 |> fct_reorder(전국관객수),
   labs(x = "영화명")
 
 #top20 국가별 극장관객수 --------------------------------
-kobis5_rank |> filter(all_rank %in% c(1:20)) |> 
+kobis9 |> filter(all_rank %in% c(1:20)) |> 
 ggplot(aes(영화명 |> fct_reorder(전국관객수),
                    전국관객수)) + 
   geom_bar(fill = "grey", stat = "identity") +
   facet_grid(.~국적) +
   coord_flip() +
   scale_y_continuous(labels = scales::comma) +
-  labs(x = "영화명")+
-  geom_label(aes(label = round(전국관객수/10000,0)))
+  geom_label(aes(label = round(전국관객수/10000,0))) +
+  theme(legend.position = "none", 
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title = element_blank(),
+        title = element_text(size = 20))
 
 #영진위 word cloud ---------------------------------------
 (kobis5_rank |> filter(all_rank %in% c(1:20)) -> kobis8)
@@ -120,10 +127,17 @@ ggplot(kobis9, aes(
   geom_bar(fill = "grey", stat = "identity") +
   facet_grid(.~등급) +
   coord_flip() +
-  scale_y_continuous(labels = scales::comma) + #y축 지수표현 해결
-  labs(x = "영화명") #+
-  bbc_style()
+  scale_y_continuous(labels = scales::comma) + 
+  labs(title = "2022년 극장관객수",
+       subtitle = "단위: 만 명") +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        title = element_text(size = 15)) +
+  geom_label(aes(label = round(전국관객수/10000,0)))
 
+  #응용
 ggplot(data = kobis9, aes(x = 영화명 |> fct_reorder(전국관객수), 
                           y = 전국관객수)) + 
   geom_bar(aes(fill = 등급), stat = "identity") + 
@@ -142,13 +156,13 @@ ggplot(data = kobis9, aes(x = 영화명 |> fct_reorder(전국관객수),
        subtitle = "단위 : 만명") +
   scale_y_continuous(labels = scales::comma) -> p2022
 
-
+p2022 + bbc_style()
 p2022 + theme(legend.position = "none", 
-              axis.text.x = element_text(size = 15),
-              axis.text.y = element_text(size = 15),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
               axis.title = element_blank(),
               title = element_text(size = 20)) +
-  geom_label(aes(label = round(전국관객수/10000,0)), size = 5) +
+  geom_label(aes(label = round(전국관객수/10000,0)), size = 4) +
   facet_wrap(.~등급)
 
 p2022 +
@@ -156,7 +170,28 @@ p2022 +
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12)) +
-  facet_wrap(.~등급, nrow = 1)
+        axis.text.y = element_text(size = 12, angle = 20)) + 
+  bbc_style() -> p1
 
+p2022  +
+  theme(title = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12)
+        , panel.background = element_blank()
+        , panel.grid.major.x = element_line(color = "#cbcbcb", size = 2)
+        , panel.grid.major.y = element_blank()) -> p2
 
+#bbc style
+p1 / p2
+
+p2022  +
+  theme(title = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        panel.background = element_blank(),
+        panel.grid.major.x = element_line(color = "#cbcbcb", size = 1),
+        panel.grid.major.y = element_blank()) +
+  facet_grid(.~등급)
+        
