@@ -58,7 +58,6 @@ kobis6 |> filter(등급 == "15세이상관람가")
 kobis6 |> filter(등급 != "15세관람가") -> kobis7
 
 #ggplot --------------------------------------------------------- 전체
-
   #색깔 지정 노랑 ~ 빨강
 grade_color2 = c("전체관람가" = "yellow",
                  "12세이상관람가" = "#a9d98f",
@@ -96,11 +95,12 @@ ggplot(aes(영화명 |> fct_reorder(전국관객수),
   labs(x = "영화명")+
   geom_label(aes(label = round(전국관객수/10000,0)))
 
-#영진위 word cloud
+#영진위 word cloud ---------------------------------------
 (kobis5_rank |> filter(all_rank %in% c(1:20)) -> kobis8)
 (kobis8 |> 
   separate(영화명, into = c("영화명", "부제"), sep = ":", convert = T) |> 
-  separate(영화명, into = c("영화명", "부제"), sep = "The ", convert = T) -> kobis9)
+  separate(영화명, 
+           into = c("영화명", "부제"), sep = "The ", convert = T) -> kobis9)
 
 library(wordcloud)
 wordcloud(words = kobis9$영화명,
@@ -114,10 +114,49 @@ wordcloud(words = kobis9$영화명,
           colors = brewer.pal(8, "Dark2"))
 
 #부제 제거 후 상위 20개 면분할
-ggplot(kobis9, aes(영화명 |> fct_reorder(전국관객수),
+ggplot(kobis9, aes(
+  영화명 |> fct_reorder(전국관객수),
                    전국관객수)) + 
   geom_bar(fill = "grey", stat = "identity") +
   facet_grid(.~등급) +
   coord_flip() +
   scale_y_continuous(labels = scales::comma) + #y축 지수표현 해결
-  labs(x = "영화명")
+  labs(x = "영화명") #+
+  bbc_style()
+
+ggplot(data = kobis9, aes(x = 영화명 |> fct_reorder(전국관객수), 
+                          y = 전국관객수)) + 
+  geom_bar(aes(fill = 등급), stat = "identity") + 
+  coord_flip() +
+  labs(x = "영화명", y = "극장관객수") +
+  scale_y_continuous(labels = scales::comma) +
+  theme(legend.position = "top") +
+  bbc_style()
+
+ggplot(data = kobis9, aes(x = 영화명 |> fct_reorder(전국관객수), 
+                          y = 전국관객수/10000)) + 
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  labs(x = "영화명", y = "극장관객수",
+       title = "2022년 극장관객수",
+       subtitle = "단위 : 만명") +
+  scale_y_continuous(labels = scales::comma) -> p2022
+
+
+p2022 + theme(legend.position = "none", 
+              axis.text.x = element_text(size = 15),
+              axis.text.y = element_text(size = 15),
+              axis.title = element_blank(),
+              title = element_text(size = 20)) +
+  geom_label(aes(label = round(전국관객수/10000,0)), size = 5) +
+  facet_wrap(.~등급)
+
+p2022 +
+  theme(title = element_text(size = 15),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12)) +
+  facet_wrap(.~등급, nrow = 1)
+
+
